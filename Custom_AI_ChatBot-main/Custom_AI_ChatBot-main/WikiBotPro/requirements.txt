@@ -8,3 +8,4 @@ openai
 tiktoken
 pyttsx3
 reportlab
+wikipedia-api
