@@ -1,1 +1,1 @@
- libespeak1
+libespeak.so.1
