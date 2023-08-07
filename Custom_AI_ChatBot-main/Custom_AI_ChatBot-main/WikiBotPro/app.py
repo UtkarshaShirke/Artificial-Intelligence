@@ -14,6 +14,7 @@ from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 import pyttsx3
+import os
 
 import wikipediaapi
 import urllib.parse
@@ -51,6 +52,21 @@ def main():
         except Exception as e:
             st.error("Invalid URL. Please enter a valid Wikipedia URL.")
             return None
+
+    def save_api_key(api_key):
+        # Save the API key as an environment variable
+        os.environ["OPENAI_API_KEY"] = api_key
+        st.success("API key saved successfully as an environment variable!")
+
+    st.write("Please enter your OpenAI API key below:")
+
+    api_key = st.text_input("OpenAI API Key")
+
+    if st.button("Save API Key"):
+        if api_key.strip() == "":
+            st.error("API key cannot be empty. Please enter a valid API key.")
+        else:
+            save_api_key(api_key)
 
     # upload file
     user_url = st.text_input("Enter Wikipedia URL: ")
@@ -135,7 +151,8 @@ def main():
                 try:
                     engine.runAndWait()
                 except RuntimeError:
-                    pass 
+                    pass
+
 
 if __name__ == "__main__":
     main()
