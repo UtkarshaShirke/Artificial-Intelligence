@@ -130,7 +130,7 @@ def main():
             knowledge_base = FAISS.from_texts(chunks, embeddings)
 
             # show user input
-            #engine = pyttsx3.init()
+            engine = pyttsx3.init()
             if prompt := st.chat_input("Ask your question: "):
                 st.session_state.messages.append({"role": "user", "content": prompt})
                 with st.chat_message("user"):
@@ -143,12 +143,15 @@ def main():
 
                 with st.chat_message("assistant"):
                     st.markdown(response)
-                    #engine.say(response)
+                    engine.say(response)
                 try:
                     st.session_state.messages.append({"role": "assistant", "content": response})
                 except AttributeError:
                     st.markdown(response)
-                
+                try:
+                    engine.runAndWait()
+                except RuntimeError:
+                    pass
 
 
 if __name__ == "__main__":
