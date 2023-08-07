@@ -20,6 +20,8 @@ import wikipediaapi
 import urllib.parse
 import warnings
 
+os.system("sudo apt install libespeak-dev")
+
 hide_default_format = """
        <style>
        #MainMenu {visibility: hidden; }
