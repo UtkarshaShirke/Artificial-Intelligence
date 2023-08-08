@@ -17,13 +17,14 @@ import pyttsx3
 import os
 from gtts import gTTS
 import base64
+import time
 
 
 import wikipediaapi
 import urllib.parse
 import warnings
 
-#os.system("sudo apt install libespeak-dev")
+
 
 hide_default_format = """
        <style>
@@ -156,8 +157,6 @@ def main():
 
                 with st.chat_message("assistant"):
                     st.markdown(response)
-                    #engine.say(response)
-
                     
                     if response:
                         response_text = response
@@ -167,14 +166,7 @@ def main():
                         audio_file = "response.mp3"
                         tts.save(audio_file)
 
-                        # Display the response text
-                        #st.write(response_text)
-
-                        # Play the audio automatically
-                        #play_audio(audio_file)
-
-                        #os.remove(audio_file)"""
-
+                        
                     def autoplay_audio(audio_file: str):
                         with open(audio_file, "rb") as f:
                             data = f.read()
@@ -189,17 +181,15 @@ def main():
                                 unsafe_allow_html=True,
                             )
                     
-                st.write(response)
-
-                autoplay_audio(audio_file)
-                """try:
+                #st.write(response)
+                    time.sleep(3)
+                    autoplay_audio(audio_file)
+                
+                try:
                     st.session_state.messages.append({"role": "assistant", "content": response})
                 except AttributeError:
                     st.markdown(response)
-                try:
-                    engine.runAndWait()
-                except RuntimeError:
-                    pass """
+                
 
 
 if __name__ == "__main__":
