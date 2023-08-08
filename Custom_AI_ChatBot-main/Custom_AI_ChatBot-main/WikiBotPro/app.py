@@ -16,12 +16,6 @@ from reportlab.lib.styles import getSampleStyleSheet
 import pyttsx3
 import os
 from gtts import gTTS
-import IPython.display as ipd
-#from pydub import AudioSegment
-#import sounddevice as sd
-import numpy as np
-import io
-from playsound import playsound
 import base64
 
 
