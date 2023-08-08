@@ -15,12 +15,21 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 import pyttsx3
 import os
+from gtts import gTTS
+import IPython.display as ipd
+#from pydub import AudioSegment
+#import sounddevice as sd
+import numpy as np
+import io
+from playsound import playsound
+import base64
+
 
 import wikipediaapi
 import urllib.parse
 import warnings
 
-os.system("sudo apt install libespeak-dev")
+#os.system("sudo apt install libespeak-dev")
 
 hide_default_format = """
        <style>
@@ -132,7 +141,15 @@ def main():
             knowledge_base = FAISS.from_texts(chunks, embeddings)
 
             # show user input
-            engine = pyttsx3.init()
+            #engine = pyttsx3.init()
+
+            def play_audio(audio_bytes):
+                # Convert the audio bytes to numpy array
+                audio_np = np.frombuffer(audio_bytes, dtype=np.uint8)
+
+                # Play the audio using sounddevice
+                sd.play(audio_np, blocking=True)
+
             if prompt := st.chat_input("Ask your question: "):
                 st.session_state.messages.append({"role": "user", "content": prompt})
                 with st.chat_message("user"):
@@ -145,15 +162,50 @@ def main():
 
                 with st.chat_message("assistant"):
                     st.markdown(response)
-                    engine.say(response)
-                try:
+                    #engine.say(response)
+
+                    
+                    if response:
+                        response_text = response
+
+                        # Generate audio from the response text
+                        tts = gTTS(text=response_text, lang="en")
+                        audio_file = "response.mp3"
+                        tts.save(audio_file)
+
+                        # Display the response text
+                        #st.write(response_text)
+
+                        # Play the audio automatically
+                        #play_audio(audio_file)
+
+                        #os.remove(audio_file)"""
+
+                    def autoplay_audio(audio_file: str):
+                        with open(audio_file, "rb") as f:
+                            data = f.read()
+                            b64 = base64.b64encode(data).decode()
+                            md = f"""
+                                <audio controls autoplay="true">
+                                <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
+                                </audio>
+                                """
+                            st.markdown(
+                                md,
+                                unsafe_allow_html=True,
+                            )
+                    
+                st.write(response)
+
+                autoplay_audio(audio_file)
+                """try:
                     st.session_state.messages.append({"role": "assistant", "content": response})
                 except AttributeError:
                     st.markdown(response)
                 try:
                     engine.runAndWait()
                 except RuntimeError:
-                    pass
+                    pass """
 
 
 if __name__ == "__main__":
